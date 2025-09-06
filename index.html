@@ -366,12 +366,12 @@
     </div>
     
     <div class="footer">
-      <p>WebScan Pro &copy; 2023 - Outil de démonstration</p>
+      <p>Rayen Touati &copy; 2025 - Outil de démonstration</p>
     </div>
   </div>
 
   <script>
-    // Détection d'ouverture de la console
+    
     function detectDevTools() {
       const threshold = 160;
       const widthThreshold = 160;
@@ -391,7 +391,7 @@
       }, 1000);
     }
     
-    // Démarrer la détection de console
+    
     detectDevTools();
     
     function fillExample(url) {
@@ -410,18 +410,18 @@
         return;
       }
       
-      // Validation basique de l'URL
+      
       if (!site.startsWith('http://') && !site.startsWith('https://')) {
         alert('Veuillez inclure le protocole (http:// ou https://)');
         return;
       }
       
-      // Cacher les résultats précédents, afficher le chargement
+      
       results.style.display = 'none';
       loading.style.display = 'block';
       scanButton.disabled = true;
       
-      // Simulation de progression
+      
       let progress = 0;
       const interval = setInterval(() => {
         progress += Math.random() * 15;
@@ -439,21 +439,21 @@
       const results = document.getElementById('results');
       const scanButton = document.getElementById('scanButton');
       
-      // Simuler un scan avec des résultats aléatoires
+      
       simulateScanResults();
       
-      // Afficher les résultats, cacher le chargement
+      
       loading.style.display = 'none';
       results.style.display = 'block';
       scanButton.disabled = false;
     }
     
     function simulateScanResults() {
-      // Générer des résultats de scan aléatoires mais réalistes
-      const score = Math.floor(Math.random() * 30) + 70; // Score entre 70 et 100
+      
+      const score = Math.floor(Math.random() * 30) + 70; 
       document.getElementById('scoreText').textContent = `Score: ${score}/100`;
       
-      // HTTPS - généralement sécurisé pour les sites modernes
+      
       const httpsStatus = document.getElementById('httpsStatus');
       if (Math.random() > 0.2) {
         httpsStatus.className = 'status success';
@@ -463,7 +463,7 @@
         httpsStatus.innerHTML = '<i class="fas fa-times-circle"></i> Non sécurisé';
       }
       
-      // En-têtes de sécurité
+      
       const headersStatus = document.getElementById('headersStatus');
       const headerRand = Math.random();
       if (headerRand > 0.7) {
@@ -477,7 +477,7 @@
         headersStatus.innerHTML = '<i class="fas fa-times-circle"></i> Insuffisant';
       }
       
-      // Cookies
+      
       const cookiesStatus = document.getElementById('cookiesStatus');
       if (Math.random() > 0.3) {
         cookiesStatus.className = 'status success';
@@ -487,7 +487,7 @@
         cookiesStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Partiellement sécurisés';
       }
       
-      // Vulnérabilités
+      
       const vulnStatus = document.getElementById('vulnStatus');
       if (Math.random() > 0.2) {
         vulnStatus.className = 'status success';
@@ -497,7 +497,7 @@
         vulnStatus.innerHTML = '<i class="fas fa-times-circle"></i> Vulnérabilités détectées';
       }
       
-      // Protection XSS
+      
       const xssStatus = document.getElementById('xssStatus');
       if (Math.random() > 0.15) {
         xssStatus.className = 'status success';
@@ -508,7 +508,7 @@
       }
     }
     
-    // Permettre la soumission avec la touche Entrée
+    
     document.getElementById('siteInput').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         startScan();
