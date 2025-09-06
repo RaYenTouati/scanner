@@ -440,7 +440,7 @@
       const scanButton = document.getElementById('scanButton');
       
       
-      simulateScanResults();
+      simulateScanResults(site);
       
       
       loading.style.display = 'none';
@@ -448,64 +448,89 @@
       scanButton.disabled = false;
     }
     
-    function simulateScanResults() {
+    function simulateScanResults(url) {
+      const domain = url.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0];
       
-      const score = Math.floor(Math.random() * 30) + 70; 
-      document.getElementById('scoreText').textContent = `Score: ${score}/100`;
-      
+      let score = 70; 
       
       const httpsStatus = document.getElementById('httpsStatus');
-      if (Math.random() > 0.2) {
+      if (url.startsWith('https://')) {
         httpsStatus.className = 'status success';
         httpsStatus.innerHTML = '<i class="fas fa-check-circle"></i> Sécurisé';
+        score += 15;
       } else {
         httpsStatus.className = 'status danger';
         httpsStatus.innerHTML = '<i class="fas fa-times-circle"></i> Non sécurisé';
+        score -= 10;
       }
       
-      
       const headersStatus = document.getElementById('headersStatus');
-      const headerRand = Math.random();
-      if (headerRand > 0.7) {
+      const popularDomains = ['google', 'facebook', 'github', 'microsoft', 'apple', 'amazon', 'netflix'];
+      const isPopularDomain = popularDomains.some(popular => domain.includes(popular));
+      
+      if (isPopularDomain) {
         headersStatus.className = 'status success';
         headersStatus.innerHTML = '<i class="fas fa-check-circle"></i> Complet';
-      } else if (headerRand > 0.3) {
+        score += 10;
+      } else if (domain.length <= 15 && !domain.includes('-')) {
         headersStatus.className = 'status warning';
         headersStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Partiel';
+        score += 5;
       } else {
         headersStatus.className = 'status danger';
         headersStatus.innerHTML = '<i class="fas fa-times-circle"></i> Insuffisant';
+        score -= 5;
       }
       
-      
       const cookiesStatus = document.getElementById('cookiesStatus');
-      if (Math.random() > 0.3) {
+      const subdomainCount = domain.split('.').length - 2;
+      
+      if (subdomainCount >= 2) {
         cookiesStatus.className = 'status success';
         cookiesStatus.innerHTML = '<i class="fas fa-check-circle"></i> Sécurisés';
+        score += 5;
       } else {
         cookiesStatus.className = 'status warning';
         cookiesStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Partiellement sécurisés';
       }
       
-      
       const vulnStatus = document.getElementById('vulnStatus');
-      if (Math.random() > 0.2) {
-        vulnStatus.className = 'status success';
-        vulnStatus.innerHTML = '<i class="fas fa-check-circle"></i> Aucune détectée';
-      } else {
+      const tld = domain.split('.').pop();
+      const riskyTlds = ['xyz', 'top', 'club', 'info', 'biz'];
+      
+      if (riskyTlds.includes(tld)) {
         vulnStatus.className = 'status danger';
         vulnStatus.innerHTML = '<i class="fas fa-times-circle"></i> Vulnérabilités détectées';
+        score -= 10;
+      } else {
+        vulnStatus.className = 'status success';
+        vulnStatus.innerHTML = '<i class="fas fa-check-circle"></i> Aucune détectée';
+        score += 5;
       }
       
-      
       const xssStatus = document.getElementById('xssStatus');
-      if (Math.random() > 0.15) {
+      if (domain.length >= 10 && /[0-9]/.test(domain) && /[a-z]/.test(domain)) {
         xssStatus.className = 'status success';
         xssStatus.innerHTML = '<i class="fas fa-check-circle"></i> Actif';
+        score += 5;
       } else {
         xssStatus.className = 'status warning';
         xssStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Partiel';
       }
+      
+      score = Math.max(0, Math.min(100, score));
+      
+      document.getElementById('scoreText').textContent = `Score: ${score}/100`;
+      
+      return {
+        score,
+        https: httpsStatus.className.includes('success'),
+        headers: headersStatus.className.includes('success') ? 'complet' : 
+                headersStatus.className.includes('warning') ? 'partiel' : 'insuffisant',
+        cookies: cookiesStatus.className.includes('success'),
+        vulnerabilities: !vulnStatus.className.includes('danger'),
+        xss: xssStatus.className.includes('success')
+      };
     }
     
     
